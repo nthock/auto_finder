@@ -21,7 +21,7 @@ services:
       options:
         loki-url: 'http://loki:loki@localhost:3100/loki/api/v1/push'
     volumes:
-      - ./config:app/config:ro
+      - ./config:/app/config:ro
       - ./lib:/app/lib:ro
       - ./priv:/app/priv:ro
       - ./mix.exs:/app/mix.exs:ro
