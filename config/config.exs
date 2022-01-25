@@ -30,12 +30,19 @@ config :auto_finder, AutoFinder.Mailer, adapter: Swoosh.Adapters.Local
 config :swoosh, :api_client, false
 
 # Configures Elixir's Logger
-config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+# config :logger, :console,
+#   format: "$time $metadata[$level] $message\n",
+#   metadata: [:request_id]
+config :logger, backends: [LoggerJSON]
+config :auto_finder, AutoFinder.Repo, loggers: [{LoggerJSON.Ecto, :log, [:info]}]
+
+config :logger_json, :backend,
+  metadata: [:file, :line, :function, :module, :application, :httpRequest, :query],
+  formatter: AutoFinder.LoggerFormatter
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+config :phoenix, :logger, false
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
