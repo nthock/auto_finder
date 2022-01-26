@@ -10,16 +10,18 @@ services:
       mix deps.get &&
       mix ecto.setup &&
       mix phx.server'
+    expose:
+      - 4000
     ports:
       - '4000:4000'
     depends_on:
       - loki
       - postgres
     working_dir: /app
-    logging:
-      driver: loki
-      options:
-        loki-url: 'http://loki:loki@localhost:3100/loki/api/v1/push'
+    # logging:
+    #   driver: loki
+    #   options:
+    #     loki-url: 'http://loki:loki@localhost:3100/loki/api/v1/push'
     volumes:
       - ./config:/app/config:ro
       - ./lib:/app/lib:ro
@@ -50,6 +52,12 @@ services:
     ports:
       - '3100:3100'
     command: '-config.file=/etc/loki/loki-config.yml'
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./docker/promtail/promtail-config.yml:/etc/promtail/promtail-config.yml
+    command: '-config.file=/etc/promtail/promtail-config.yml'
 
   grafana:
     image: grafana/grafana:latest
